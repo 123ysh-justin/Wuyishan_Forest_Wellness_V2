@@ -13,3 +13,10 @@ Thumbs.db
 _publish/
 snap.yaml
 home_snap.yaml
+
+# 验证截图 / 发布缓存 / 测试残留
+*.png
+_publish/
+.playwright-cli/
+snap.yaml
+home_snap.yaml

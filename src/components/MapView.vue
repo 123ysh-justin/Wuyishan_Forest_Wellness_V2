@@ -84,7 +84,8 @@ function transportFC(): GeoJSON.FeatureCollection {
 function buildStyle(): maplibregl.StyleSpecification {
   return {
     version: 8,
-    glyphs: 'https://font.openmaptiles.org/{fontstack}/{range}.pbf',
+    // 字形自托管于 public/fonts（构建后随站点发布，国内直连不挂起）；中文(CJK)由 localIdeographFontFamily 用系统字体本机渲染，不请求服务器
+    glyphs: `${import.meta.env.BASE_URL}fonts/{fontstack}/{range}.pbf`,
     sources: {
       imagery: { type: 'raster', tiles: imagery.tiles, tileSize: 256, maxzoom: imagery.maxzoom, attribution: imagery.attribution },
       dem: { type: 'raster-dem', tiles: terrainSrc.tiles, tileSize: 256, maxzoom: 15, encoding: 'terrarium', attribution: terrainSrc.attribution },
@@ -282,6 +283,7 @@ onMounted(() => {
     maxPitch: 75,
     attributionControl: { compact: true },
     interactive: props.interactive,
+    localIdeographFontFamily: 'sans-serif',
     maxBounds: props.lockRegion
       ? [[bounds[0] - pad, bounds[1] - pad], [bounds[2] + pad, bounds[3] + pad]]
       : undefined
@@ -290,7 +292,14 @@ onMounted(() => {
     map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'bottom-right')
     map.addControl(new maplibregl.ScaleControl({ unit: 'metric' }), 'bottom-left')
   }
-  map.on('load', () => {
+  // 图钉注册不单依赖 load 事件：字体源偶发挂起会导致 load 不触发，
+  // 故加 styledata 兜底；ensurePin 内部以 hasImage 判重，重复调用无害
+  // 图钉/地形/初始视角不单依赖 load 事件：字体源偶发挂起会使 load 不触发，
+  // 故用 styledata 兜底；readyDone 守卫保证整套初始化只执行一次
+  let readyDone = false
+  function onReady() {
+    if (readyDone || !map) return
+    readyDone = true
     applyTerrain()
     try {
       ;(map as any).setSky?.({
@@ -301,7 +310,9 @@ onMounted(() => {
     ensurePin()
     if (props.fitOnLoad) fitRegion()
     emit('ready', map!)
-  })
+  }
+  map.on('styledata', onReady)
+  map.on('load', onReady)
 
   // 仅开发环境暴露调试句柄，便于自动化测试断言路线/地形状态（生产构建被剔除）
   if (import.meta.env.DEV) {
