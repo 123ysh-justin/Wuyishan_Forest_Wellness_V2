@@ -9,3 +9,7 @@ Thumbs.db
 .idea
 *.log
 .workbuddy
+.playwright-cli/
+_publish/
+snap.yaml
+home_snap.yaml
