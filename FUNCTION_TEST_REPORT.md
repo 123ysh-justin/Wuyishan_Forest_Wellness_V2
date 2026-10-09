@@ -178,3 +178,15 @@
 
 - MapLibre 本版本对裸 `HTMLCanvasElement` 的 `addImage` 抛 `mismatched image size. expected: 0 but got: N`（内部读取 `image.data`），必须转 `ctx.getImageData()` 后以 `ImageData` + `pixelRatio` 注册。
 - 在 `map.on('load')` 内同步 `addImage` 会静默失败（精灵图未就绪），需 `requestAnimationFrame` 重试直至 `hasImage` 为真后再动态 `addLayer` 并绑定图层点击事件。
+
+## 第六轮微调（2026-10-09 下午：详情页滚动 + 国内底图）
+
+| # | 要求 | 实现方式 | 实测结果 |
+|---|------|----------|----------|
+| 1 | 课程详情页无法滚动，只能缩放网页看下方内容 | 全局 `base.css` 将 `html/body/#app` 的 `overflow: hidden` 改为 `overflow-x: hidden; overflow-y: auto`（原规则为首页全屏地图而设；首页 `.cockpit` 为 `position: fixed; inset: 0; overflow: hidden`，不受影响；课程/基地/列表页均恢复整页滚动） | ✅ playwright 滚动到底截图：教学环节第 5 步、教学准备/材料/安全、授课基地横幅、页脚脚注全部可见 |
+| 2 | 地图底图境外源（EOX）国内加载慢，换国内源 | `dataSources.ts` 新增高德卫星影像源（webst01-04.is.autonavi.com 四节点，GCJ-02，国内 CDN）并设 `ACTIVE_IMAGERY='gaodeSatellite'`；EOX 保留为一键可切备选；影像 source `maxzoom` 改为随源配置 | ✅ 浏览器 resource 断言：autonavi 瓦片 57 个请求、eox 0 个；首页截图高德卫星影像渲染正常，边界/图钉/地名齐全 |
+
+### 备注
+- 高德影像为 GCJ-02 坐标系，与 DataV 行政边界（同为 GCJ-02）贴合良好。
+- 字体 glyphs（openmaptiles）与高程（AWS S3）仍为境外服务，但请求量小、对首屏影响有限；如后续仍偏慢可再换国内 glyphs 方案。
+- 生产构建 10.05s 通过。

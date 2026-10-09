@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * 真实地理数据层：EOX Sentinel-2 影像 + AWS SRTM 地形
+ * 真实地理数据层：高德卫星影像（国内 CDN，快）+ AWS SRTM 地形
  * + 环带四区县（武夷山市/建阳区/邵武市/光泽县）真实行政边界
  * + 山峰/河流/乡镇/景区地名标注
  * + 基地节点（SVG 高级图钉 + 脉冲光晕，地形贴合固定）+ 交通枢纽点位（机场/动车站/公交站）
@@ -10,7 +10,7 @@
  */
 import { onMounted, onBeforeUnmount, ref } from 'vue'
 import maplibregl from 'maplibre-gl'
-import { IMAGERY_SOURCES, TERRAIN_SOURCES, ACTIVE_TERRAIN } from '../config/dataSources'
+import { IMAGERY_SOURCES, TERRAIN_SOURCES, ACTIVE_TERRAIN, ACTIVE_IMAGERY } from '../config/dataSources'
 import { store, transportHubs, type Base } from '../data/store'
 import { buildRegionMask, regionBounds } from '../utils/mask'
 import beltGeo from '../data/belt_cities.json'
@@ -56,7 +56,7 @@ const is3D = ref(true)
 const labelsOn = ref(true)
 const terrainOn = ref(true)
 
-const imagery = IMAGERY_SOURCES.eoxS2_2024
+const imagery = IMAGERY_SOURCES[ACTIVE_IMAGERY]
 const terrainSrc = TERRAIN_SOURCES[ACTIVE_TERRAIN]
 
 // —— 数据构造 ——
@@ -86,7 +86,7 @@ function buildStyle(): maplibregl.StyleSpecification {
     version: 8,
     glyphs: 'https://font.openmaptiles.org/{fontstack}/{range}.pbf',
     sources: {
-      imagery: { type: 'raster', tiles: imagery.tiles, tileSize: 256, maxzoom: 16, attribution: imagery.attribution },
+      imagery: { type: 'raster', tiles: imagery.tiles, tileSize: 256, maxzoom: imagery.maxzoom, attribution: imagery.attribution },
       dem: { type: 'raster-dem', tiles: terrainSrc.tiles, tileSize: 256, maxzoom: 15, encoding: 'terrarium', attribution: terrainSrc.attribution },
       'dem-hs': { type: 'raster-dem', tiles: terrainSrc.tiles, tileSize: 256, maxzoom: 15, encoding: 'terrarium' },
       belt: { type: 'geojson', data: beltGeo as any },

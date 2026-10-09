@@ -1,0 +1,13 @@
+- generic [ref=e5]:
+  - generic [ref=e6]: "[plugin:vite:vue] [vue/compiler-sfc] Missing semicolon. (98:3) C:/Users/justin1/WorkBuddy/2026-10-08-21-36-00/Wuyishan_Forest_Wellness_V2/src/views/Home.vue 100|"
+  - generic [ref=e7]: C:/Users/justin1/WorkBuddy/2026-10-08-21-36-00/Wuyishan_Forest_Wellness_V2/src/views/Home.vue:98:3
+  - generic [ref=e8]: "93 | areaStyle: { color: 'rgba(63,174,106,.25)' }, 94 | lineStyle: { color: '#3fae6a' }, 95 | itemStyle: { color: '#3fae6a' } | ^ 96 | }] 97 | }]"
+  - generic [ref=e9]: at constructor (C:\Users\justin1\WorkBuddy\2026-10-08-21-36-00\Wuyishan_Forest_Wellness_V2\node_modules\@babel\parser\lib\index.js:369:19) at TypeScriptParserMixin.raise (C:\Users\justin1\WorkBuddy\2026-10-08-21-36-00\Wuyishan_Forest_Wellness_V2\node_modules\@babel\parser\lib\index.js:6622:19) at TypeScriptParserMixin.semicolon (C:\Users\justin1\WorkBuddy\2026-10-08-21-36-00\Wuyishan_Forest_Wellness_V2\node_modules\@babel\parser\lib\index.js:6918:10) at TypeScriptParserMixin.parseReturnStatement (C:\Users\justin1\WorkBuddy\2026-10-08-21-36-00\Wuyishan_Forest_Wellness_V2\node_modules\@babel\parser\lib\index.js:13177:12) at TypeScriptParserMixin.parseStatementContent (C:\Users\justin1\WorkBuddy\2026-10-08-21-36-00\Wuyishan_Forest_Wellness_V2\node_modules\@babel\parser\lib\index.js:12832:21) at TypeScriptParserMixin.parseStatementContent (C:\Users\justin1\WorkBuddy\2026-10-08-21-36-00\Wuyishan_Forest_Wellness_V2\node_modules\@babel\parser\lib\index.js:9531:18) at TypeScriptParserMixin.parseStatementLike (C:\Users\justin1\WorkBuddy\2026-10-08-21-36-00\Wuyishan_Forest_Wellness_V2\node_modules\@babel\parser\lib\index.js:12801:17) at TypeScriptParserMixin.parseStatementListItem (C:\Users\justin1\WorkBuddy\2026-10-08-21-36-00\Wuyishan_Forest_Wellness_V2\node_modules\@babel\parser\lib\index.js:12781:17) at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\justin1\WorkBuddy\2026-10-08-21-36-00\Wuyishan_Forest_Wellness_V2\node_modules\@babel\parser\lib\index.js:13350:61) at TypeScriptParserMixin.parseBlockBody (C:\Users\justin1\WorkBuddy\2026-10-08-21-36-00\Wuyishan_Forest_Wellness_V2\node_modules\@babel\parser\lib\index.js:13343:10
+  - generic [ref=e10]:
+    - text: Click outside, press Esc key, or fix the code to dismiss.You can also disable this overlay by setting
+    - code [ref=e11]: server.hmr.overlay
+    - text: to
+    - code [ref=e12]: "false"
+    - text: in
+    - code [ref=e13]: vite.config.ts
+    - text: .
